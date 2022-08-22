@@ -1,14 +1,15 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { CommentsServiceService } from "../comments-service.service";
 import { PostsServiceService } from "../posts-service.service";
+import { Comment } from "../model/comment";
 
 @Component({
   selector: "app-comments-component",
   templateUrl: "./comments-component.component.html",
 })
-export class CommentsComponentComponent implements OnInit, OnDestroy {
-  comments: any = [];
+export class CommentsComponentComponent implements OnInit {
+  comments: Comment[] = [];
   enteredId: number = this.postsService.id;
 
   constructor(
@@ -27,9 +28,5 @@ export class CommentsComponentComponent implements OnInit, OnDestroy {
 
   addComment() {
     this.router.navigate(["add"], { relativeTo: this.route });
-  }
-
-  ngOnDestroy(): void {
-    this.commentsService.commentsChanged.unsubscribe();
   }
 }

@@ -1,9 +1,7 @@
-export class Comment {
-  constructor(
-    public postId: number,
-    public id: number,
-    public name: string,
-    public email: string,
-    public body: string
-  ) {}
+export interface Comment {
+  postId: number;
+  id: number;
+  name: string;
+  email: string;
+  body: string;
 }

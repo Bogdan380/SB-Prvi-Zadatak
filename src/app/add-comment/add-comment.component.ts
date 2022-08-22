@@ -1,17 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CommentsServiceService } from '../comments-service.service';
-import { Comment } from '../model/comment';
-import { PostsServiceService } from '../posts-service.service';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { NgControl } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { CommentsServiceService } from "../comments-service.service";
+import { Comment } from "../model/comment";
+import { PostsServiceService } from "../posts-service.service";
 
 @Component({
-  selector: 'app-add-comment',
-  templateUrl: './add-comment.component.html',
-  styleUrls: ['./add-comment.component.css'],
+  selector: "app-add-comment",
+  templateUrl: "./add-comment.component.html",
+  styleUrls: ["./add-comment.component.css"],
 })
 export class AddCommentComponent implements OnInit {
-  comment: Comment = new Comment(0, 0, '', '', '');
-  @ViewChild('addCommentForm') form: any;
+  comment: Comment = { postId: 0, id: 0, name: "", email: "", body: "" };
+  @ViewChild("addCommentForm") form!: NgControl;
 
   constructor(
     private commentsService: CommentsServiceService,
@@ -23,7 +24,7 @@ export class AddCommentComponent implements OnInit {
   ngOnInit(): void {}
 
   goBack() {
-    this.router.navigate(['../'], { relativeTo: this.route });
+    this.router.navigate(["../"], { relativeTo: this.route });
   }
 
   submitComment() {

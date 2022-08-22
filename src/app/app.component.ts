@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
+import { NgControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import { CommentsServiceService } from "./comments-service.service";
 import { PostsServiceService } from "./posts-service.service";
@@ -9,7 +10,7 @@ import { PostsServiceService } from "./posts-service.service";
   styleUrls: ["./app.component.css"],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  @ViewChild("commentsForm") form: any;
+  @ViewChild("commentsForm") form!: NgControl;
   postMessage: string = "";
   commentMessage: string = "";
   showPostMsg: boolean = false;
@@ -56,5 +57,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.postsService.msgChanged.unsubscribe();
     this.commentsService.messageChanged.unsubscribe();
     this.commentsService.dataChanged.unsubscribe();
+    this.postsService.postsChanged.unsubscribe();
+    this.commentsService.commentsChanged.unsubscribe();
   }
 }

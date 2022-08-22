@@ -1,15 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Post } from '../model/post';
-import { PostsServiceService } from '../posts-service.service';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { NgControl } from "@angular/forms";
+import { Post } from "../model/post";
+import { PostsServiceService } from "../posts-service.service";
 
 @Component({
-  selector: 'app-post-form',
-  templateUrl: './post-form.component.html',
-  styleUrls: ['./post-form.component.css'],
+  selector: "app-post-form",
+  templateUrl: "./post-form.component.html",
+  styleUrls: ["./post-form.component.css"],
 })
 export class PostFormComponent implements OnInit {
-  post: Post = new Post(0, 0, '', '');
-  @ViewChild('postForm') form: any;
+  post: Post = { userId: 0, id: 0, title: "", body: "" };
+
+  @ViewChild("postForm") form!: NgControl;
 
   constructor(private postsService: PostsServiceService) {}
 

@@ -24,13 +24,14 @@
         class="form-control"
         id="email"
         name="email"
+        email
         required
       />
       <div
         class="alert alert-warning m-2"
         *ngIf="email.touched && !email.valid"
       >
-        Email is required.
+        Valid email is required.
       </div>
     </div>
   </div>
@@ -45,10 +46,11 @@
       class="form-control"
       id="body"
       name="body"
+      minlength="8"
       required
     ></textarea>
     <div class="alert alert-warning m-2" *ngIf="body.touched && !body.valid">
-      Body is required.
+      Body is required. (minimum 8 characters)
     </div>
   </div>
 

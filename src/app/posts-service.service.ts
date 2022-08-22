@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { EventEmitter, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Post } from "./model/post";
 import { catchError, tap } from "rxjs/operators";
 import { Observable, of, Subject } from "rxjs";
@@ -11,16 +11,16 @@ export class PostsServiceService {
   postsChanged = new Subject<Post[]>();
   msgChanged = new Subject<string>();
 
-  private posts: any = [];
+  private posts: Post[] = [];
   private errorMsg: string = "";
   public id!: number;
 
-  postsUrl = "https://jsonplaceholder.typicode.com/posts";
+  postsUrl: string = "https://jsonplaceholder.typicode.com/posts";
 
   constructor(private http: HttpClient) {}
 
-  getPosts(): Observable<any> {
-    return this.http.get(this.postsUrl).pipe(
+  getPosts(): Observable<string | Post[]> {
+    return this.http.get<Post[]>(this.postsUrl).pipe(
       tap((data) => {
         this.posts = data;
       }),
@@ -32,8 +32,8 @@ export class PostsServiceService {
     );
   }
 
-  enterPost(post: Post): Observable<any> {
-    return this.http.post(this.postsUrl, post).pipe(
+  enterPost(post: Post): Observable<string | Post> {
+    return this.http.post<Post>(this.postsUrl, post).pipe(
       tap((data) => {
         this.posts.unshift(data);
         this.postsChanged.next(this.posts.slice());
@@ -47,11 +47,11 @@ export class PostsServiceService {
     );
   }
 
-  returnPosts() {
+  returnPosts(): Post[] {
     return this.posts.slice();
   }
 
-  getMessage() {
+  getMessage(): string {
     return this.errorMsg;
   }
 

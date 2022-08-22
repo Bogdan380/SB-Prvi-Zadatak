@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { PostsServiceService } from "./posts-service.service";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { catchError, tap } from "rxjs/operators";
@@ -14,23 +14,23 @@ export class CommentsServiceService {
   dataChanged = new Subject<boolean>();
 
   private id!: number;
-  private comments: any = [];
+  private comments: Comment[] = [];
   private errorMsg: string = "";
 
-  commentsUrl = "";
+  commentsUrl: string = "";
 
   constructor(
     private postsService: PostsServiceService,
     private http: HttpClient
   ) {}
 
-  getComments(): Observable<any> {
+  getComments(): Observable<string | Comment[]> {
     this.id = this.postsService.id;
     this.commentsUrl =
       "https://jsonplaceholder.typicode.com/posts/" +
       String(this.id) +
       "/comments";
-    return this.http.get(this.commentsUrl).pipe(
+    return this.http.get<Comment[]>(this.commentsUrl).pipe(
       tap((data) => {
         this.comments = data;
         this.dataChanged.next(this.comments.length === 0);
@@ -44,8 +44,8 @@ export class CommentsServiceService {
     );
   }
 
-  addComment(comment: Comment): Observable<any> {
-    return this.http.post(this.commentsUrl, comment).pipe(
+  addComment(comment: Comment): Observable<string | Comment> {
+    return this.http.post<Comment>(this.commentsUrl, comment).pipe(
       tap((data) => {
         this.comments.unshift(data);
         this.commentsChanged.next(this.comments.slice());
@@ -80,7 +80,7 @@ export class CommentsServiceService {
     }
   }
 
-  returnComments() {
+  returnComments(): Comment[] {
     return this.comments.slice();
   }
 }
