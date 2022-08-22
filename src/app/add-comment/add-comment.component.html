@@ -1,0 +1,72 @@
+<form #addCommentForm="ngForm" class="m-5 col-8">
+  <div class="row mb-4">
+    <div class="col p-0">
+      <label for="name" class="form-label">Name</label>
+      <input
+        #name="ngModel"
+        [(ngModel)]="comment.name"
+        type="text"
+        class="form-control"
+        id="name"
+        name="name"
+        required
+      />
+      <div class="alert alert-warning m-2" *ngIf="name.touched && !name.valid">
+        Name is required.
+      </div>
+    </div>
+    <div class="col ms-4 p-0">
+      <label for="email" class="form-label">Email address</label>
+      <input
+        #email="ngModel"
+        [(ngModel)]="comment.email"
+        type="email"
+        class="form-control"
+        id="email"
+        name="email"
+        required
+      />
+      <div
+        class="alert alert-warning m-2"
+        *ngIf="email.touched && !email.valid"
+      >
+        Email is required.
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <label for="body" class="form-label p-0">Comment body</label>
+    <textarea
+      #body="ngModel"
+      [(ngModel)]="comment.body"
+      cols="30"
+      rows="5"
+      class="form-control"
+      id="body"
+      name="body"
+      required
+    ></textarea>
+    <div class="alert alert-warning m-2" *ngIf="body.touched && !body.valid">
+      Body is required.
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <button
+        type="submit"
+        class="btn btn-primary mt-5 me-5"
+        [disabled]="!addCommentForm.valid"
+        (click)="submitComment()"
+      >
+        Submit
+      </button>
+    </div>
+    <div class="col">
+      <button (click)="goBack()" type="button" class="btn btn-danger mt-5 ms-5">
+        Cancel
+      </button>
+    </div>
+  </div>
+</form>

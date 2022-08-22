@@ -1,0 +1,32 @@
+<div class="m-5">
+  <button routerLink="" type="button" class="btn btn-danger">Close</button>
+  <button
+    type="submit"
+    class="btn btn-success mx-5"
+    (click)="addComment()"
+    [disabled]="!comments.length"
+  >
+    Add a new comment
+  </button>
+
+  <router-outlet></router-outlet>
+
+  <table class="table my-5">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">postId</th>
+        <th scope="col">name</th>
+        <th scope="col">email</th>
+        <th scope="col">body</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let comment of comments">
+        <td>{{ comment.postId }}</td>
+        <td>{{ comment.name }}</td>
+        <td>{{ comment.email }}</td>
+        <td>{{ comment.body }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

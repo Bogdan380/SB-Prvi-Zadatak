@@ -1,0 +1,42 @@
+<h3 class="mx-3 mt-3 mb-5">Enter a new post</h3>
+<form #postForm="ngForm" class="m-3">
+  <div class="mb-3 col">
+    <label for="title" class="form-label">Post title</label>
+    <input
+      #title="ngModel"
+      type="text"
+      class="form-control"
+      id="title"
+      [(ngModel)]="post.title"
+      name="title"
+      required
+    />
+    <div class="alert alert-warning m-2" *ngIf="title.touched && !title.valid">
+      Title is required.
+    </div>
+  </div>
+  <div class="mb-3 col">
+    <label for="body" class="form-label">Post body</label>
+    <textarea
+      #body="ngModel"
+      cols="30"
+      rows="10"
+      class="form-control"
+      id="body"
+      [(ngModel)]="post.body"
+      name="body"
+      required
+    ></textarea>
+    <div class="alert alert-warning m-2" *ngIf="body.touched && !body.valid">
+      Body is required.
+    </div>
+  </div>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    (click)="submitPost()"
+    [disabled]="!postForm.valid"
+  >
+    Submit
+  </button>
+</form>
