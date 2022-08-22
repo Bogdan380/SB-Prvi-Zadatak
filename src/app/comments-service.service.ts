@@ -1,23 +1,23 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { PostsServiceService } from './posts-service.service';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
-import { Comment } from './model/comment';
+import { Injectable, EventEmitter } from "@angular/core";
+import { PostsServiceService } from "./posts-service.service";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { catchError, tap } from "rxjs/operators";
+import { Observable, of, Subject } from "rxjs";
+import { Comment } from "./model/comment";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class CommentsServiceService {
-  commentsChanged = new EventEmitter<any>();
-  messageChanged = new EventEmitter<string>();
-  dataChanged = new EventEmitter<boolean>();
+  commentsChanged = new Subject<Comment[]>();
+  messageChanged = new Subject<string>();
+  dataChanged = new Subject<boolean>();
 
   private id!: number;
   private comments: any = [];
-  private errorMsg: string = '';
+  private errorMsg: string = "";
 
-  commentsUrl = '';
+  commentsUrl = "";
 
   constructor(
     private postsService: PostsServiceService,
@@ -27,18 +27,18 @@ export class CommentsServiceService {
   getComments(): Observable<any> {
     this.id = this.postsService.id;
     this.commentsUrl =
-      'https://jsonplaceholder.typicode.com/posts/' +
+      "https://jsonplaceholder.typicode.com/posts/" +
       String(this.id) +
-      '/comments';
+      "/comments";
     return this.http.get(this.commentsUrl).pipe(
       tap((data) => {
         this.comments = data;
-        this.dataChanged.emit(this.comments.length === 0);
-        this.commentsChanged.emit(this.comments.slice());
+        this.dataChanged.next(this.comments.length === 0);
+        this.commentsChanged.next(this.comments.slice());
       }),
       catchError((error) => {
         this.errorMsg = this.getErrorMessage(error);
-        this.messageChanged.emit(this.errorMsg);
+        this.messageChanged.next(this.errorMsg);
         return of(this.errorMsg);
       })
     );
@@ -47,12 +47,12 @@ export class CommentsServiceService {
   addComment(comment: Comment): Observable<any> {
     return this.http.post(this.commentsUrl, comment).pipe(
       tap((data) => {
-        this.comments.push(data);
-        this.commentsChanged.emit(this.comments.slice());
+        this.comments.unshift(data);
+        this.commentsChanged.next(this.comments.slice());
       }),
       catchError((error) => {
         this.errorMsg = this.getErrorMessage(error);
-        this.messageChanged.emit(this.errorMsg);
+        this.messageChanged.next(this.errorMsg);
         alert(this.errorMsg);
         return of(this.errorMsg);
       })

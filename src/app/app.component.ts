@@ -1,17 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { CommentsServiceService } from './comments-service.service';
-import { PostsServiceService } from './posts-service.service';
+import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
+import { Router } from "@angular/router";
+import { CommentsServiceService } from "./comments-service.service";
+import { PostsServiceService } from "./posts-service.service";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"],
 })
-export class AppComponent implements OnInit {
-  @ViewChild('commentsForm') form: any;
-  postMessage: string = '';
-  commentMessage: string = '';
+export class AppComponent implements OnInit, OnDestroy {
+  @ViewChild("commentsForm") form: any;
+  postMessage: string = "";
+  commentMessage: string = "";
   showPostMsg: boolean = false;
   showCommentMsg: boolean = false;
   enteredId!: number;
@@ -23,9 +23,9 @@ export class AppComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.showButton = false;
-    this.router.navigate(['']);
+    this.router.navigate([""]);
     this.postsService.getPosts().subscribe();
     this.postsService.msgChanged.subscribe((data) => (this.postMessage = data));
     this.commentsService.messageChanged.subscribe(
@@ -46,9 +46,15 @@ export class AppComponent implements OnInit {
 
   showComments() {
     this.postsService.id = this.enteredId;
-    this.router.navigate(['comments/post', this.enteredId]);
+    this.router.navigate(["comments/post", this.enteredId]);
     this.commentsService.getComments().subscribe();
     this.form.reset();
     this.showButton = true;
+  }
+
+  ngOnDestroy(): void {
+    this.postsService.msgChanged.unsubscribe();
+    this.commentsService.messageChanged.unsubscribe();
+    this.commentsService.dataChanged.unsubscribe();
   }
 }
